@@ -1,26 +1,26 @@
 using System;
 
-public interface ICargoStrategy<T>
+public interface ICargoStrategy
 {
-    void SelectPallet(T cargo);
+    void SelectPallet(ICargo cargo);
 }
 
 public interface ICargoPreparation
 {
-    void SetStrategy<T>(ICargoStrategy<T> strategy);
-    void PrepareCargo<T>(T cargo);
+    void SetStrategy(ICargoStrategy strategy);
+    void PrepareCargo(ICargo cargo);
 }
 
 public class CargoPreparation : ICargoPreparation
 {
-    private ICargoStrategy<object> _strategy;
+    private ICargoStrategy _strategy;
 
-    public void SetStrategy<T>(ICargoStrategy<T> strategy)
+    public void SetStrategy(ICargoStrategy strategy)
     {
         _strategy = strategy;
     }
 
-    public void PrepareCargo<T>(T cargo)
+    public void PrepareCargo(ICargo cargo)
     {
         _strategy.SelectPallet(cargo);
     }
@@ -47,17 +47,17 @@ public class PrepareStingerPallet : ICargo
     public int MaxHeight => 1000;
 }
 
-public class ConcreteCargoStrategyEPallet : ICargoStrategy<PrepareEPallet>
+public class ConcreteCargoStrategyEPallet : ICargoStrategy
 {
-    public void SelectPallet(PrepareEPallet cargo)
+    public void SelectPallet(ICargo cargo)
     {
         Console.WriteLine($"Selected pallet for {cargo.Type} with max weight {cargo.MaxWeight} and max height {cargo.MaxHeight}");
     }
 }
 
-public class ConcreteCargoStrategyStingerPallet : ICargoStrategy<PrepareStingerPallet>
+public class ConcreteCargoStrategyStingerPallet : ICargoStrategy
 {
-    public void SelectPallet(PrepareStingerPallet cargo)
+    public void SelectPallet(ICargo cargo)
     {
         Console.WriteLine($"Selected pallet for {cargo.Type} with max weight {cargo.MaxWeight} and max height {cargo.MaxHeight}");
     }
