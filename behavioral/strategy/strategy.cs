@@ -2,13 +2,13 @@ using System;
 
 interface ICargoStrategy
 {
-    void SelectPallet(ICargo cargo);
+    void SelectPallet();
 }
 
 interface ICargoPreparation
 {
     void SetStrategy(ICargoStrategy strategy);
-    void PrepareCargo(ICargo cargo);
+    void PrepareCargo();
 }
 
 class CargoPreparation : ICargoPreparation
@@ -20,9 +20,9 @@ class CargoPreparation : ICargoPreparation
         _strategy = strategy;
     }
 
-    public void PrepareCargo(ICargo cargo)
+    public void PrepareCargo()
     {
-        _strategy.SelectPallet(cargo);
+        _strategy.SelectPallet();
     }
 }
 
@@ -33,33 +33,19 @@ interface ICargo
     int MaxHeight { get; }
 }
 
-class PrepareEPallet : ICargo
-{
-    public string Type => "EPallet";
-    public int MaxWeight => 1000;
-    public int MaxHeight => 2000;
-}
-
-class PrepareStingerPallet : ICargo
-{
-    public string Type => "StingerPallet";
-    public int MaxWeight => 500;
-    public int MaxHeight => 1000;
-}
-
 class ConcreteCargoStrategyEPallet : ICargoStrategy
 {
-    public void SelectPallet(ICargo cargo)
+    public void SelectPallet()
     {
-        Console.WriteLine($"Selected pallet for {cargo.Type} with max weight {cargo.MaxWeight} and max height {cargo.MaxHeight}");
+        Console.WriteLine("Selected pallet for EPallet with max weight 800kg and max height 4500mm");
     }
 }
 
 class ConcreteCargoStrategyStingerPallet : ICargoStrategy
 {
-    public void SelectPallet(ICargo cargo)
+    public void SelectPallet()
     {
-        Console.WriteLine($"Selected pallet for {cargo.Type} with max weight {cargo.MaxWeight} and max height {cargo.MaxHeight}");
+        Console.WriteLine("Selected pallet for StingerPallet with max weight 1000kg and max height 5000mm");
     }
 }
 
@@ -72,12 +58,12 @@ class Program
         Console.WriteLine("Prepare strategy for E-pallet");
         ctx.SetStrategy(new ConcreteCargoStrategyEPallet());
         Console.WriteLine("Execute strategy for E-pallet");
-        ctx.PrepareCargo(new PrepareEPallet());
+        ctx.PrepareCargo();
         Console.ReadLine();
         Console.WriteLine("Prepare strategy for Stinger pallet");
         ctx.SetStrategy(new ConcreteCargoStrategyStingerPallet());
         Console.WriteLine("Execute strategy for Stinger pallet");
-        ctx.PrepareCargo(new PrepareStingerPallet());
+        ctx.PrepareCargo();
         Console.ReadLine();
     }
 }
